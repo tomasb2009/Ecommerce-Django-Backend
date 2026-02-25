@@ -1,0 +1,66 @@
+Hola, {{ vendor.name|default:vendor.user.email }},
+
+Has recibido una nueva venta. Un cliente ha comprado productos de tu tienda.
+
+============================================================
+  RESUMEN DE LA VENTA
+============================================================
+
+Pedido: #{{ order.oid }}
+Fecha del pedido: {{ order.date|date:"d/m/Y H:i" }}
+Estado de pago: {{ order.payment_status|title }}
+Estado del pedido: {{ order.order_status|title }}
+
+------------------------------------------------------------
+  DATOS DEL COMPRADOR (para envío / contacto)
+------------------------------------------------------------
+Nombre completo: {{ order.full_name }}
+Email: {{ order.email }}
+Teléfono: {{ order.mobile|default:"—" }}
+
+------------------------------------------------------------
+  DIRECCIÓN DE ENVÍO DEL CLIENTE
+------------------------------------------------------------
+Dirección: {{ order.address }}
+Ciudad: {{ order.city }}
+Provincia/Estado: {{ order.state }}
+País: {{ order.country }}
+
+------------------------------------------------------------
+  TUS PRODUCTOS VENDIDOS EN ESTE PEDIDO
+------------------------------------------------------------
+{% for item in vendor_order_items %}
+- Producto: {{ item.product.title }}
+  Ref. ítem: {{ item.oid }}
+  Cantidad: {{ item.qty }}
+  Talla: {{ item.size|default:"—" }} · Color: {{ item.color|default:"—" }}
+  País destino: {{ item.country|default:"—" }}
+  Precio unitario: ${{ item.price }}
+  Subtotal línea: ${{ item.sub_total }}
+  Envío línea: ${{ item.shipping_amount }}
+  Servicio línea: ${{ item.service_fee }}
+  Impuestos línea: ${{ item.tax_fee }}
+  Total línea: ${{ item.total }}
+  Cupones aplicados:
+  {% for c in item.coupon.all %}
+    - {{ c.code }} ({{ c.discount }}{% if c.discount_type == "percent" %}%{% endif %})
+  {% empty %}
+    - Ninguno
+  {% endfor %}
+
+{% empty %}
+- No hay ítems para este vendedor.
+{% endfor %}
+
+============================================================
+  RESUMEN DE TU VENTA EN ESTE PEDIDO
+============================================================
+Total correspondiente a tus productos (pedido #{{ order.oid }}): ${{ vendor_total }}
+
+------------------------------------------------------------
+
+Este correo es para informarte de la venta. Prepara y envía los productos al comprador según la dirección indicada.
+
+Si tienes dudas sobre el pedido, contacta al cliente en {{ order.email }} o al teléfono indicado.
+
+Pedido: #{{ order.oid }}.

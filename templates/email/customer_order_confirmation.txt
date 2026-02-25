@@ -1,0 +1,83 @@
+Hi {{ order.full_name }},
+
+Gracias por tu compra. Hemos recibido tu pago correctamente.
+
+============================================================
+  RESUMEN DEL PEDIDO
+============================================================
+
+ID de pedido: {{ order.oid }}
+Fecha: {{ order.date|date:"d/m/Y H:i" }}
+Estado de pago: {{ order.payment_status|title }}
+Estado del pedido: {{ order.order_status|title }}
+ID de sesión Stripe: {{ order.stripe_session_id }}
+
+------------------------------------------------------------
+  DATOS DEL CLIENTE
+------------------------------------------------------------
+Nombre completo: {{ order.full_name }}
+Email: {{ order.email }}
+Teléfono: {{ order.mobile }}
+
+------------------------------------------------------------
+  DIRECCIÓN DE ENVÍO
+------------------------------------------------------------
+Dirección: {{ order.address }}
+Ciudad: {{ order.city }}
+Provincia/Estado: {{ order.state }}
+País: {{ order.country }}
+
+------------------------------------------------------------
+  VENDEDORES
+------------------------------------------------------------
+{% for v in order.vendor.all %}
+- {{ v.name }} ({{ v.mobile }})
+{% empty %}
+- Sin vendedores asociados
+{% endfor %}
+
+============================================================
+  LÍNEAS DE PEDIDO
+============================================================
+{% for item in order_items %}
+- Producto: {{ item.product.title }}
+  Vendedor: {{ item.vendor.name }}
+  Cantidad: {{ item.qty }}
+  Precio unitario: ${{ item.price }}
+  Subtotal línea: ${{ item.sub_total }}
+  Envío línea: ${{ item.shipping_amount }}
+  Servicio línea: ${{ item.service_fee }}
+  Impuestos línea: ${{ item.tax_fee }}
+  Total línea: ${{ item.total }}
+  País destino: {{ item.country }}
+  Talla: {{ item.size|default:"-" }}
+  Color: {{ item.color|default:"-" }}
+  Cupones aplicados:
+  {% for c in item.coupon.all %}
+    - {{ c.code }} ({{ c.discount }}{% if c.discount_type == "percent" %}%{% endif %})
+  {% empty %}
+    - Ninguno
+  {% endfor %}
+  Importe inicial línea (antes de cupones): ${{ item.initial_total }}
+  Ahorro en esta línea: ${{ item.saved }}
+
+{% endfor %}
+
+============================================================
+  RESUMEN ECONÓMICO
+============================================================
+Importe inicial pedido (antes de cupones): ${{ order.initial_total }}
+Ahorro total en cupones: ${{ order.saved }}
+
+Subtotal productos: ${{ order.sub_total }}
+Envío total: ${{ order.shipping_amount }}
+Servicios: ${{ order.service_fee }}
+Impuestos: ${{ order.tax_fee }}
+------------------------------------------------------------
+TOTAL A PAGAR: ${{ order.total }}
+------------------------------------------------------------
+
+Si tienes cualquier duda sobre tu pedido, responde a este correo.
+
+¡Gracias por comprar con nosotros!
+
