@@ -31,7 +31,11 @@ SECRET_KEY = 'django-insecure-^6ry@ycl5#fta=+$ayh7n_0526&=g%8m#2xdrb785_1pb*dqf9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ecommerce-django-backend-w2mh.onrender.com"]
+
+CSRF_TRUSTED_ORIGINS = ["https://ecommerce-django-backend-w2mh.onrender.com"]
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 
 # Application definition
