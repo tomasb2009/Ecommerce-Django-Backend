@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 from environs import Env
 import os
+import dj_database_url
+
 
 env = Env()
 env.read_env()
@@ -31,7 +33,9 @@ SECRET_KEY = 'django-insecure-^6ry@ycl5#fta=+$ayh7n_0526&=g%8m#2xdrb785_1pb*dqf9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ecommerce-django-backend-w2mh.onrender.com"]
+ALLOWED_HOSTS = ["*"]
+
+# ecommerce-django-backend-w2mh.onrender.com
 
 CSRF_TRUSTED_ORIGINS = ["https://ecommerce-django-backend-w2mh.onrender.com"]
 
@@ -109,6 +113,8 @@ DATABASES = {
     }
 }
 
+db_from_env=dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
