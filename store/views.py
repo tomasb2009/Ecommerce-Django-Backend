@@ -493,9 +493,9 @@ class StripeCheckoutView(generics.CreateAPIView):
                     }
                 ],
                 mode="payment",
-                success_url="http://localhost:5173/payment-success/" +
+                success_url="https://celebrated-parfait-368a98.netlify.app/payment-success/" +
                 order.oid + '?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID}'
+                cancel_url='https://celebrated-parfait-368a98.netlify.app/payment-failed/?session_id={CHECKOUT_SESSION_ID}'
             )
 
             order.stripe_session_id = checkout_session.id

@@ -132,7 +132,7 @@ class PasswordResetEmailVerify(generics.RetrieveAPIView):
             user.reset_token = reset_token
             user.save()
 
-            link = f"http://localhost:5173/create-new-password?otp={user.otp}&uidb64={uidb64}"
+            link = f"https://celebrated-parfait-368a98.netlify.app/create-new-password?otp={user.otp}&uidb64={uidb64}"
         return user
 
 
